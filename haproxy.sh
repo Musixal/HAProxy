@@ -228,7 +228,7 @@ read_option(){
         3) destroy_tunnel ;;
         4) reset_service ;;
         5) view_haproxy_log_realtime ;;
-        6) echo "Exiting..." && break ;;
+        6) echo "Exiting..." && exit ;;
         *) echo -e "${RED}Invalid option!${NC}" && sleep 1 ;;
     esac
 }
