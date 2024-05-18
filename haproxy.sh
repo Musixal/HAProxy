@@ -416,8 +416,8 @@ display_menu(){
 	show_haproxy_status
     echo "-------------------------------"
     echo "Menu:"
-    echo -e "${GREEN}1. Configure multiple-server tunnel ${NC}"
-    echo -e "${BLUE}2. Configure Loadbalancer${NC}"
+    echo -e "${GREEN}1. Configure Tunnel (IPv4/v6)${NC}"
+    echo -e "${BLUE}2. Configure Loadbalancer (IPv4/v6)${NC}"
     echo -e "${RED}3. Stop HAProxy service and remove configs${NC}"
     echo -e "${YELLOW}4. Restart HAProxy Service${NC}"
     echo -e "5. View HAProxy real-time logs"
