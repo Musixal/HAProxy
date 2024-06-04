@@ -10,7 +10,7 @@ cat << "EOF"
 |  _  ||  _  ||  __/|    /| | | |/   \   \ /  
 | | | || | | || |   | |\ \\ \_/ / /^\ \  | |  
 \_| |_/\_| |_/\_|   \_| \_|\___/\/   \/  \_/ 
-                  by github.com/Musixal v1.1 
+                by github.com/Musixal v1.1.1 
 EOF
   echo -e "${NC}"
 }
@@ -390,7 +390,7 @@ view_haproxy_log_realtime() {
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
-BLUE='\033[0;34m'
+BLUE='\033[36m'
 NC='\033[0m' # No Color
 
 
