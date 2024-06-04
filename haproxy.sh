@@ -37,9 +37,6 @@ install_jq() {
             exit 1
         fi
     
-    else
-        echo -e "${GREEN}jq is already installed.${NC}"
-        sleep 1
     fi
 }
 
@@ -60,10 +57,6 @@ install_haproxy() {
             read -p "Press any key to continue..."
             exit 1
         fi
-    
-    else
-        echo -e "${GREEN}HAProxy is already installed.${NC}"
-        sleep 1
     fi
 }
 
@@ -164,9 +157,9 @@ while true; do
     # Append frontend and backend configurations to HAProxy configuration file
     echo "frontend frontend_$haproxy_bind_port" >> "$haproxy_config_file"
     echo "    bind *:$haproxy_bind_port" >> "$haproxy_config_file"
-    echo "    default_backend backend_server_$haproxy_bind_port" >> "$haproxy_config_file"
+    echo "    default_backend backend_$haproxy_bind_port" >> "$haproxy_config_file"
     echo "" >> "$haproxy_config_file"
-    echo "backend backend_server_$haproxy_bind_port" >> "$haproxy_config_file"
+    echo "backend backend_$haproxy_bind_port" >> "$haproxy_config_file"
     echo "    server server_$haproxy_bind_port $destination_ip:$destination_port" >> "$haproxy_config_file"
     echo "" >> "$haproxy_config_file"
 	
