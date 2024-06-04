@@ -201,9 +201,9 @@ while true; do
     # Append frontend and backend configurations to HAProxy configuration file
     echo "frontend frontend_$haproxy_bind_port" >> "$haproxy_config_file"
     echo "    bind *:$haproxy_bind_port" >> "$haproxy_config_file"
-    echo "    default_backend backend_server_$haproxy_bind_port" >> "$haproxy_config_file"
+    echo "    default_backend backend_$haproxy_bind_port" >> "$haproxy_config_file"
     echo "" >> "$haproxy_config_file"
-    echo "backend backend_server_$haproxy_bind_port" >> "$haproxy_config_file"
+    echo "backend backend_$haproxy_bind_port" >> "$haproxy_config_file"
     echo "    server server_$haproxy_bind_port $destination_ip:$destination_port" >> "$haproxy_config_file"
     echo "" >> "$haproxy_config_file"
 	echo ''
@@ -268,19 +268,13 @@ echo "" >> "$haproxy_config_file"
     echo "2. Least Connections"
     echo "3. Source IP Hash"
     echo "4. URI Hash"
-    echo "5. Least Time"
-    echo "6. Static-Weighted Round Robin"
-    echo "7. Dynamic-Weighted Round Robin"
-	read -p "Select the desired load balancing algorithm: " choice
+    read -p "Select the desired load balancing algorithm: " choice
 	
     case $choice in
         1) lb_algorithm="roundrobin";;
         2) lb_algorithm="leastconn";;
         3) lb_algorithm="source";;
         4) lb_algorithm="uri";;
-        5) lb_algorithm="leasttime";;
-        6) lb_algorithm="static-weighted";;
-        7) lb_algorithm="dynamic-weighted";;
         *) echo "Invalid input. Using default load balancing algorithm (roundrobin)."
            lb_algorithm="roundrobin";;
     esac
