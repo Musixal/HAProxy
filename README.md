@@ -1,11 +1,11 @@
 ## Installation
 
-To use HAProxy Tunnel, simply download and run the `haproxy.sh` script. You can download the script from the following link:
+To use HAProxy script, simply download and run the `haproxy.sh` script. You can download the script from the following link:
 ```
-wget -Nq https://github.com/Musixal/haproxy-tunnel/raw/main/haproxy.sh && bash haproxy.sh
+wget -Nq https://github.com/Musixal/haproxy/raw/main/haproxy.sh && bash haproxy.sh
 ```
 # Menu
-![Menu](https://github.com/Musixal/haproxy-tunnel/blob/main/haproxy-menu.png)
+![Menu](https://github.com/Musixal/haproxy/blob/main/haproxy-menu.png)
 
 # Donation Link
 
