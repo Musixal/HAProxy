@@ -4,13 +4,13 @@
 show_logo() {
 echo -e "${BLUE}"
 cat << "EOF"
- _   _   ___  ____________ _______   ____   __
-| | | | / _ \ | ___ \ ___ \  _  \ \ / /\ \ / /
-| |_| |/ /_\ \| |_/ / |_/ / | | |\ V /  \ V / 
-|  _  ||  _  ||  __/|    /| | | |/   \   \ /  
-| | | || | | || |   | |\ \\ \_/ / /^\ \  | |  
-\_| |_/\_| |_/\_|   \_| \_|\___/\/   \/  \_/ 
-                by github.com/Musixal v1.1.1 
+    __  _____    ____                       
+   / / / /   |  / __ \_________  _  ____  __
+  / /_/ / /| | / /_/ / ___/ __ \| |/_/ / / /
+ / __  / ___ |/ ____/ /  / /_/ />  </ /_/ / 
+/_/ /_/_/  |_/_/   /_/   \____/_/|_|\__, /  
+                                   /____/   
+                  github.com/Musixal v1.2 
 EOF
   echo -e "${NC}"
 }
@@ -63,16 +63,17 @@ install_haproxy() {
 #install HAProxy
 install_haproxy
 
-# Get server IP
-SERVER_IP=$(hostname -I | awk '{print $1}')
 
-# Fetch server country using ip-api.com
-SERVER_COUNTRY=$(curl -sS "http://ip-api.com/json/$SERVER_IP" | jq -r '.country')
+# Fetch server country
+SERVER_COUNTRY=$(curl -sS "http://ipwhois.app/json/$SERVER_IP" | jq -r '.country')
+
+# Fetch server isp 
+SERVER_ISP=$(curl -sS "http://ipwhois.app/json/$SERVER_IP" | jq -r '.isp')
 
 # Function to display server location and IP
 display_server_info() {
-    echo -e "${GREEN}Server Country:${NC} $SERVER_COUNTRY"
-    echo -e "${GREEN}Server IP:${NC} $SERVER_IP"
+    echo -e "${GREEN}Location:${NC} $SERVER_COUNTRY "
+    echo -e "${GREEN}Datacenter:${NC} $SERVER_ISP"
 }
 
 # Function to show HAProxy status
@@ -88,13 +89,13 @@ show_haproxy_status() {
 }
 
 
-#Menu for multi-server configuration
+# Menu for multi-server configuration
 multiple_server_menu() {
 clear
     echo -e "Select an option:"
     echo ''
     echo -e "${GREEN}1. New Configuration${NC}"
-    echo -e "${BLUE}2. Add a new server${NC}"
+    echo -e "${BLUE}2. Add a new config${NC}"
     echo -e "${RED}3. Quit${NC}"
     echo ''
     read -p "Enter your choice: " choice
@@ -102,7 +103,7 @@ clear
         1) configure_new_tunnel ;;
         2) add_new_server ;;
         3) echo -e "${RED}3. Exiting...${NC}" && sleep 1 && return 0 ;;
-        *) echo -e "${RED}Invalid option!${NC}" && sleep 1 ;;
+        *) echo -e "${RED}Invalid option!${NC}" && sleep 1  ;;
     esac
 }
 
@@ -120,6 +121,8 @@ if ! [[ $confirm == "yes" || $confirm == "Yes" || $confirm == "YES" ]]; then
 	echo -e "${RED}Operation cancelled by user.${NC}" && sleep 1
 	return 1
 fi
+
+echo
 
 # Verify if the file exists, if not, create it
 if [ ! -f "$haproxy_config_file" ]; then
@@ -147,8 +150,7 @@ echo "    timeout client  50000ms" >> "$haproxy_config_file"
 echo "    timeout server  50000ms" >> "$haproxy_config_file"
 echo "" >> "$haproxy_config_file"
 
-# Add multi-port support
-while true; do
+    # Add multi-port support
     read -p "1. Enter HAProxy bind ports (e.g., 443,8443,2096): " haproxy_bind_ports
     read -p "2. Enter Destination ports (in the same order as HAProxy bind ports, e.g., 443,8443,2096): " destination_ports
     read -p "3. Enter Destination (Kharej) IP address: " destination_ip
@@ -184,22 +186,15 @@ while true; do
         echo "    server server_$haproxy_bind_port $destination_ip:$destination_port" >> "$haproxy_config_file"
         echo "" >> "$haproxy_config_file"
     done
-    echo ''
-    read -p "Do you want to add another config? (yes/no): " add_another
-    echo ''
-    if [[ $add_another != "yes" ]]; then
-        break
-    fi
-done
-
-echo ''
+ 
+echo
 echo -e "${GREEN}Configuration updated successfully in $haproxy_config_file${NC}"
 
   
     # Restart HAProxy service
     systemctl restart haproxy
     
-    echo ''
+    echo 
     read -p "Press Enter to continue..."
 }
 
