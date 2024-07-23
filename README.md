@@ -5,7 +5,7 @@ To use HAProxy script, simply download and run the `haproxy.sh` script. You can 
 bash <(curl -Ls --ipv4 https://github.com/Musixal/haproxy/raw/main/haproxy.sh)
 ```
 # Menu
-![Menu](https://github.com/Musixal/haproxy/blob/main/haproxy-menu.png)
+![Menu](https://github.com/Musixal/haproxy/blob/main/menu.png)
 
 # Donation Link
 
