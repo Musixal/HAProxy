@@ -148,40 +148,48 @@ echo "    timeout server  50000ms" >> "$haproxy_config_file"
 echo "" >> "$haproxy_config_file"
 
 # Add multi-port support
-read -p "1. Enter HAProxy bind ports (e.g., 443,8443,2096): " haproxy_bind_ports
-read -p "2. Enter Destination ports (in the same order as HAProxy bind ports, e.g., 443,8443,2096): " destination_ports
-read -p "3. Enter Destination (Kharej) IP address: " destination_ip
+while true; do
+    read -p "1. Enter HAProxy bind ports (e.g., 443,8443,2096): " haproxy_bind_ports
+    read -p "2. Enter Destination ports (in the same order as HAProxy bind ports, e.g., 443,8443,2096): " destination_ports
+    read -p "3. Enter Destination (Kharej) IP address: " destination_ip
 
-# Split the comma-separated ports into arrays
-IFS=',' read -r -a haproxy_ports_array <<< "$haproxy_bind_ports"
-IFS=',' read -r -a destination_ports_array <<< "$destination_ports"
+    # Split the comma-separated ports into arrays
+    IFS=',' read -r -a haproxy_ports_array <<< "$haproxy_bind_ports"
+    IFS=',' read -r -a destination_ports_array <<< "$destination_ports"
 
-# Check if both arrays have the same length
-if [ "${#haproxy_ports_array[@]}" -ne "${#destination_ports_array[@]}" ]; then
-    echo -e "${RED}The number of HAProxy bind ports and Destination ports must match.${NC}"
-    read -p "Press Enter to continue..."
-    systemctl stop haproxy
-    rm -f "$haproxy_config_file"
-    return 1
-fi
+    # Check if both arrays have the same length
+    if [ "${#haproxy_ports_array[@]}" -ne "${#destination_ports_array[@]}" ]; then
+        echo -e "${RED}The number of HAProxy bind ports and Destination ports must match.${NC}"
+        read -p "Press Enter to continue..."
+        systemctl stop haproxy
+        rm -f "$haproxy_config_file"
+        return 1
+    fi
 
-# Iterate over each port in the array
-for i in "${!haproxy_ports_array[@]}"; do
-    haproxy_bind_port="${haproxy_ports_array[$i]}"
-    destination_port="${destination_ports_array[$i]}"
-    
-    # Trim any leading or trailing whitespace from the ports
-    haproxy_bind_port=$(echo "$haproxy_bind_port" | xargs)
-    destination_port=$(echo "$destination_port" | xargs)
-    
-    # Append frontend and backend configurations to HAProxy configuration file
-    echo "frontend frontend_$haproxy_bind_port" >> "$haproxy_config_file"
-    echo "    bind *:$haproxy_bind_port" >> "$haproxy_config_file"
-    echo "    default_backend backend_$haproxy_bind_port" >> "$haproxy_config_file"
-    echo "" >> "$haproxy_config_file"
-    echo "backend backend_$haproxy_bind_port" >> "$haproxy_config_file"
-    echo "    server server_$haproxy_bind_port $destination_ip:$destination_port" >> "$haproxy_config_file"
-    echo "" >> "$haproxy_config_file"
+    # Iterate over each port in the array
+    for i in "${!haproxy_ports_array[@]}"; do
+        haproxy_bind_port="${haproxy_ports_array[$i]}"
+        destination_port="${destination_ports_array[$i]}"
+        
+        # Trim any leading or trailing whitespace from the ports
+        haproxy_bind_port=$(echo "$haproxy_bind_port" | xargs)
+        destination_port=$(echo "$destination_port" | xargs)
+        
+        # Append frontend and backend configurations to HAProxy configuration file
+        echo "frontend frontend_$haproxy_bind_port" >> "$haproxy_config_file"
+        echo "    bind *:$haproxy_bind_port" >> "$haproxy_config_file"
+        echo "    default_backend backend_$haproxy_bind_port" >> "$haproxy_config_file"
+        echo "" >> "$haproxy_config_file"
+        echo "backend backend_$haproxy_bind_port" >> "$haproxy_config_file"
+        echo "    server server_$haproxy_bind_port $destination_ip:$destination_port" >> "$haproxy_config_file"
+        echo "" >> "$haproxy_config_file"
+    done
+    echo ''
+    read -p "Do you want to add another config? (yes/no): " add_another
+    echo ''
+    if [[ $add_another != "yes" ]]; then
+        break
+    fi
 done
 
 echo ''
