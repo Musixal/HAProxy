@@ -9,6 +9,8 @@ bash <(curl -Ls --ipv4 https://github.com/Musixal/haproxy/raw/main/haproxy.sh)
 
 # Donation Link
 
-   <a href="https://nowpayments.io/donation?api_key=6Z16MRY-AF14Y8T-J24TXVS-00RDKK7&source=lk_donation&medium=referral" target="_blank">
-     <img src="https://nowpayments.io/images/embeds/donation-button-white.svg" alt="Crypto donation button by NOWPayments">
-    </a>
+Donate TRX (TRC-20) to support our project:
+``` wallet
+TMVBGzX4qpt12R1qWsJMpT1ttoKH1kus1H
+```
+Thanks for your support! 
